@@ -1,40 +1,30 @@
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        String str = br.readLine();
 
-        String N = str.split(" ")[0];
-        int B = Integer.parseInt(str.split(" ")[1]);
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        HashMap<Character, Integer> map = new HashMap<>();
-        for (int i = 0; i < 26; i++) {
-            map.put((char) ('A' + i), 10 + i);
-        }
+		String str = br.readLine();
 
-        int result = 0;
-        int length = N.length();
-        for (int i = 0; i < length; i++) {
-            char c = N.charAt(length - 1 - i);
-            int value;
-            // 숫자 0-9일 경우
-            if (Character.isDigit(c)) {
-                value = c - '0';
-            }
-            // 문자 A-Z일 경우
-            else {
-                value = map.get(c);
-            }
-            result += value * Math.pow(B, i);
-        }
+		String N = str.split(" ")[0];
+		int B = Integer.parseInt(str.split(" ")[1]);
 
-        bw.write(String.valueOf(result));
-        bw.flush();
-        bw.close();
-    }
+		int result = 0;
+		for (int i = 0; i < N.length(); i++) {
+			char ch = N.charAt(i);
+			if (B > 10) {
+				if (ch - '0' < 10) {
+					result += Math.pow(B, N.length() - 1 - i) * (ch - '0');
+				} else {
+					result += Math.pow(B, N.length() - 1 - i) * ((ch - 'A') + 10);
+				}
+			} else {
+				result += Math.pow(B, N.length() - 1 - i) * (ch - '0');
+			}
+		}
+
+		System.out.println(result);
+	}
 
 }
