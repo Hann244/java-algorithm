@@ -1,48 +1,49 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-
-	static boolean visited[];
-	static ArrayList<Integer>A[];
-	static int count = 0;
+	
+	static int[][] map;
+	static boolean[] visited;
+	static int n, v, cnt = 0;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-		int n = Integer.parseInt(br.readLine());
-		int c = Integer.parseInt(br.readLine());
-
-		A = new ArrayList[n + 1];
-		for (int i = 1; i <= n; i++) {
-			A[i] = new ArrayList<Integer>();
-		}
+		StringTokenizer st = null;
 		
-		for (int i = 0; i < c; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int s = Integer.parseInt(st.nextToken());
-			int e = Integer.parseInt(st.nextToken());
-			A[s].add(e);
-			A[e].add(s);
-		}
+		n = Integer.parseInt(br.readLine());
+		v = Integer.parseInt(br.readLine());
 		
-		for (int i = 1; i <= n; i++) {
-			Collections.sort(A[i]);
+		// 컴퓨터 번호가 1번부터 시작
+		map = new int[n + 1][n + 1];
+		
+		for (int i = 0; i < v; i++) {
+			st = new StringTokenizer(br.readLine());
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			
+			// 양방향 연결
+			map[a][b] = map[b][a] = 1;
 		}
 		
 		visited = new boolean[n + 1];
-		DFS(1);
-		System.out.println(count - 1);
+		
+		dfs(1);
+		
+		System.out.println(cnt);
+		
 	}
 	
-	private static void DFS(int node) {
-		count++;
-		visited[node] = true;
-		for (int i : A[node]) {
-			if (!visited[i]) {
-				DFS(i);
+	private static void dfs(int start) {
+		visited[start] = true;
+		
+		for (int i = 1; i <= n; i++) {
+			if (map[start][i] == 1 && !visited[i]) {
+				dfs(i);
+				cnt++;
 			}
 		}
 	}
-
 }
