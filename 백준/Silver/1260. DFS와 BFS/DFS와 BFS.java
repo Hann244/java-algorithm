@@ -1,68 +1,70 @@
-import java.io.*;
-import java.util.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-
-	static boolean visited[];
-	static ArrayList<Integer>A[];
+	
+	static int[][] map;
+	static boolean[] visited;
+	static int n, m, v;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		
 		StringTokenizer st = new StringTokenizer(br.readLine());
-		int N = Integer.parseInt(st.nextToken());
-		int M = Integer.parseInt(st.nextToken());
-		int start = Integer.parseInt(st.nextToken());
 		
-		A = new ArrayList[N + 1];
-		for (int i = 1; i <= N; i++) {
-			A[i] = new ArrayList<Integer>();
-		}
+		n = Integer.parseInt(st.nextToken()); // 정점의 개수
+		m = Integer.parseInt(st.nextToken()); // 간선의 개수
+		v = Integer.parseInt(st.nextToken()); // 탐색을 시작할 정점의 번호
 		
-		for (int i = 0; i < M; i++) {
+		map = new int[n + 1][n + 1];
+		
+		for (int i = 1; i <= m; i++) {
 			st = new StringTokenizer(br.readLine());
-			int S = Integer.parseInt(st.nextToken());
-			int E = Integer.parseInt(st.nextToken());
-			A[S].add(E);
-			A[E].add(S);
+			int a = Integer.parseInt(st.nextToken());
+			int b = Integer.parseInt(st.nextToken());
+			map[a][b] = map[b][a] = 1; // 양방향 간선
 		}
 		
-		for (int i = 1; i <= N; i++) {
-			Collections.sort(A[i]);
-		}
-		
-		visited = new boolean[N + 1];
-		DFS(start);
+		visited = new boolean[n + 1];
+		dfs(v);
 		System.out.println();
-		visited = new boolean[N + 1];
-		BFS(start);
+		visited = new boolean[n + 1];
+		bfs(v);
+		
 	}
 	
-	private static void DFS(int node) {
-		System.out.print(node + " ");
-		visited[node] = true;
-		for (int i : A[node]) {
-			if (!visited[i]) {
-				DFS(i);
+	static void dfs(int start) {
+		visited[start] = true;
+		System.out.print(start + " ");
+		
+		for (int i = 1; i <= n; i++) {
+			if (map[start][i] == 1 && !visited[i]) {
+				dfs(i);
 			}
 		}
 	}
-
-	private static void BFS(int node) {
-		Queue<Integer> queue = new LinkedList<Integer>();
-		queue.add(node);
-		visited[node] = true;
+	
+	static void bfs(int start) {
+		Queue<Integer> q = new LinkedList<>();
+		q.offer(start);
+		visited[start] = true;
 		
-		while(!queue.isEmpty()) {
-			int now_node = queue.poll();
-			System.out.print(now_node + " ");
-			for (int i : A[now_node]) {
-				if (!visited[i]) {
+		while (!q.isEmpty()) {
+			int temp = q.poll();
+			
+			System.out.print(temp + " ");
+			
+			for (int i = 1; i <= n; i++) {
+				if (map[temp][i] == 1 && !visited[i]) {
+					q.offer(i);
 					visited[i] = true;
-					queue.add(i); // BFS는 queue에 넣어주면 됨
 				}
 			}
 		}
+		
 	}
-
 }
