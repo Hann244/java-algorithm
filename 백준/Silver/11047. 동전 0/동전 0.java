@@ -1,31 +1,34 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-        Integer[] coins = new Integer[N];
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		
+		int n = Integer.parseInt(st.nextToken());
+		int k = Integer.parseInt(st.nextToken());
+		
+		int[] coins = new int[n];
+		
+		for (int i = 0; i < n; i++) {
+			coins[i] = Integer.parseInt(br.readLine());
+		}
+		
+		int cnt = 0;
+		for (int i = n - 1; i > -1; i--) {
+			if (k == 0) break;
+			
+			if (coins[i] > k) continue;
+			
+			cnt += k / coins[i];
+			k %= coins[i];
+		}
+		
+		System.out.println(cnt);
+	}
 
-        for (int i = 0; i < N; i++) {
-            coins[i] = Integer.parseInt(br.readLine());
-        }
-        Arrays.sort(coins, Collections.reverseOrder());
-
-        int count = 0;
-        for (int coin : coins) {
-            count += K / coin;
-            K = K % coin;
-            if (K == 0) break;
-        }
-
-        System.out.println(count);
-    }
 }
