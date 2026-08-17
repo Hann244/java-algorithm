@@ -5,9 +5,7 @@ class Solution {
         for (int i = 0; i < number.length(); i++) {
             char current = number.charAt(i);
             
-            while (!sb.isEmpty() 
-                   && k > 0 
-                   && sb.charAt(sb.length() - 1) < current) {
+            while (sb.length() > 0 && k > 0 && sb.charAt(sb.length() - 1) < current) {
                 sb.deleteCharAt(sb.length() - 1);
                 k--;
             }
@@ -15,7 +13,9 @@ class Solution {
             sb.append(current);
         }
         
-        if (k != 0) sb.setLength(number.length() - k);
+        if (k > 0) {
+            sb.setLength(sb.length() - k);
+        }
         
         return sb.toString();
     }
